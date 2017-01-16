@@ -1,0 +1,88 @@
+public class BasicDataUtil {
+	
+	private BasicDataUtil() {
+	}
+
+	/**
+	 * 判断字符串是否为空
+	 * @param str
+	 * @return boolean
+	 */
+	public static boolean isEmpty(String str) {
+		return (str == null) || (str.length() <= 0);
+	}
+	
+	/**
+	 * 判断list是否为空
+	 * @param list
+	 * @return
+	 */
+	public static boolean isEmpty(List<? extends Object> list) {
+		return (list == null) || list.isEmpty();
+	}
+	
+	/**
+	 * 判断Array是否为空
+	 * @param Array
+	 * @return
+	 */
+	public static boolean isEmpty(Object[] array) {
+		return (array == null) || (array.length <= 0);
+	}
+	
+	/**
+	 * 将String类型的数据更改为Long
+	 * @param str
+	 * @return
+	 */
+	public static Long changeValueToLong(String str){
+		try{
+			return Long.valueOf(str);
+		} catch(Exception e){
+			return Long.valueOf(-1);
+		}
+	}
+	
+	/**
+	 * 将String类型的数据更改为Integer
+	 * @param str
+	 * @return
+	 */
+	public static Integer changeValueToInteger(String str){
+		try{
+			return Integer.valueOf(str);
+		} catch(Exception e){
+			return Integer.valueOf(-1);
+		}
+	}
+	
+	public static String changeArrayToString(Object[] array) {
+		StringBuilder result = new StringBuilder();
+		for(Object object : array) {
+			result.append(object.toString());
+			result.append(",");
+		}
+		if(array.length > 0) {
+			result.deleteCharAt(result.length() - 1);
+		}
+
+		return result.toString();
+	}
+	
+	public static BigInteger changeValueToBigInteger(Object obj) {
+		try {
+			return new BigInteger(obj.toString());
+		} catch (Exception e){
+			return new BigInteger("0");
+		}
+	}
+	
+	public static short changeValueToShort(Object obj) {
+		try {
+			return (short) obj;
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+
+}
