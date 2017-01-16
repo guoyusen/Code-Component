@@ -1,0 +1,49 @@
+@SuppressWarnings("unchecked")
+	public static <T> T getRequestBody(HttpServletRequest request, Class<T> clzss) {
+		Class<?> entity = null;
+		Object result = null;
+		try {
+			entity = Class.forName(clzss.getName());
+			result = entity.newInstance();
+			Field[] field = result.getClass().getDeclaredFields();
+			for (int i = 0; i < field.length; i++) {
+				String fieldName = field[i].getName();
+				/*System.out.println("============fieldName=====================");
+				System.out.println(fieldName+ "   " + field[i].getType().getName());*/
+				String setMethodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+				/*System.out.println("=========================setMethodName===========");
+				System.out.println(setMethodName);
+				System.out.println(request.getParameter(fieldName));*/
+				Method setMethod = clzss.getDeclaredMethod(setMethodName, field[i].getType());
+				if (setMethod != null && request.getParameter(fieldName) != null) {
+					setMethod.invoke(result, getMatchedParam(field[i].getType(), request.getParameter(fieldName)));
+				}
+			}
+			return (T) result;
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+				| SecurityException | ClassNotFoundException | InstantiationException e) {
+			e.printStackTrace();
+			return (T) result;
+		}
+	}
+	
+	private static Object getMatchedParam(Class<?> clzss, Object obj){
+		if(clzss.getName().equals("java.lang.String")){
+			return obj.toString();
+		} else if(clzss.getName().equals("java.lang.Long")){
+			return BasicDataUtil.changeValueToLong(obj.toString());
+		} else if(clzss.getName().equals("java.lang.Integer")){
+			return BasicDataUtil.changeValueToInteger(obj.toString());
+		} else if(clzss.getName().equals("java.lang.Short")){
+			return BasicDataUtil.changeValueToShort(obj.toString());
+		} else if(clzss.getName().equals("boolean")){
+			return BasicDataUtil.changeValueToBoolean(obj.toString());
+		}else if(clzss.getName().equals("long")){
+			return BasicDataUtil.changeValueTolong(obj.toString());
+		}else if(clzss.getName().equals("int")){
+			return BasicDataUtil.changeValueToInt(obj.toString());
+		}else if(clzss.getName().equals("java.lang.Character")){
+			return BasicDataUtil.changeValueToCharacter(obj.toString());
+		}
+		return obj;
+	}
