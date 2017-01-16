@@ -1,0 +1,12 @@
+public static List<MultipartFile> getMultipartFileList(HttpServletRequest request){
+		List<MultipartFile> fileList = new ArrayList<MultipartFile>();
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+		if(multipartResolver.isMultipart(request)){
+			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+			Iterator<String> nameList = multipartRequest.getFileNames();
+			while(nameList.hasNext()){
+				fileList.add(multipartRequest.getFile(nameList.next()));
+			}
+		}
+		return fileList;
+	}
