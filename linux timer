@@ -1,1 +1,4 @@
 0 1 * * * sh /home/kintaiapp_user/schedual/AttendanceCSV.sh
+
+crontab -l
+crontab -e
