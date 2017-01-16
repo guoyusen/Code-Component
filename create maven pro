@@ -1,0 +1,5 @@
+mvn archetype:generate 
+  cd dir
+  mvn archetype:generate -DarchetypeArtifactId=maven-archetype-webapp
+  mvn archetype:generate
+  mvn archetype:generate
