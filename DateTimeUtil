@@ -1,0 +1,89 @@
+public class DateTimeUtil {
+	
+	public static final String FMT_FULL = "yyyy-MM-dd'T'HH:mm:ssZ";
+	
+	public static final String FMY_YMD = "yyyyMMdd";
+	
+	public static final String FMT_HM = "HHmm";
+	
+	private static Logger logger = Logger.getLogger(DateTimeUtil.class);
+	
+	private DateTimeUtil() {
+	}
+	
+	public static String getYYYYMMDD() {
+		Date date = new Date(System.currentTimeMillis());
+		SimpleDateFormat format = new SimpleDateFormat(FMY_YMD, Locale.JAPANESE);
+		format.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo")); 
+		return format.format(date);
+	}
+	
+	public static String getCurrentFullTime() {
+		Date date = new Date(System.currentTimeMillis());
+		SimpleDateFormat format = new SimpleDateFormat(FMT_FULL, Locale.JAPANESE);
+		format.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo")); 
+		return format.format(date);
+	}
+	
+	public static Long getDifferenceToCurrentByTime(String time) {
+		SimpleDateFormat format = new SimpleDateFormat(FMT_FULL, Locale.JAPANESE);
+		format.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo")); 
+		try {
+			return Math.abs((format.parse(time).getTime() - (new Date()).getTime()) / 60000);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static BigInteger formatStringToTimeMillis(String time){
+		SimpleDateFormat format = new SimpleDateFormat(FMT_FULL, Locale.JAPANESE);
+		format.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo")); 
+		try {
+			return BasicDataUtil.changeValueToBigInteger(format.parse(time).getTime());
+		} catch (ParseException e) {
+			logger.error(e.getMessage());
+			return BigInteger.valueOf(0);
+		}
+	}
+	
+	public static BigInteger getCurrentTimeMillis(){
+		return BigInteger.valueOf(System.currentTimeMillis());
+	}
+	
+	public static boolean isValidTimeFormatFull(String date){
+		SimpleDateFormat format = new SimpleDateFormat(FMT_FULL, Locale.JAPANESE);
+		format.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo")); 
+		format.setLenient(false);
+		try{
+			format.parse(date);
+		} catch(ParseException e){
+			return false;
+		}
+		return true;
+	}
+	
+	public static String getYYYYMMDDFromTimeMillis(Long timeMillis) {
+		SimpleDateFormat format = new SimpleDateFormat(FMT_FULL, Locale.JAPANESE);
+		format.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo")); 
+		Date date = new Date(timeMillis);
+		return format.format(date);
+	}
+	
+	public static long getDifferenceByTimeFullToNineTeen(String time) {
+    	SimpleDateFormat formats = new SimpleDateFormat(FMT_FULL, Locale.JAPANESE);
+    	Calendar calendarA = Calendar.getInstance();
+    	Calendar calendarB = Calendar.getInstance();
+    	try {
+    		calendarA.setTime(formats.parse(time));
+    		calendarB.setTime(formats.parse(time));
+    		calendarB.set(Calendar.HOUR_OF_DAY, 19);
+    		calendarB.set(Calendar.MINUTE, 0);
+    		return (calendarA.getTimeInMillis() - calendarB.getTimeInMillis()) / 60000;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return 0;
+		}
+    }
+
+}
